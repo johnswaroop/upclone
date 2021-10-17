@@ -1,0 +1,39 @@
+.button {
+    font-family: "Raleway", sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 32px;
+    border-radius: 2px;
+    transition: 0.5s;
+    color: #fff;
+    cursor: pointer;
+    width: 10rem;
+}
+
+.round{
+    border-radius: 50px
+}
+
+.secondary {
+    @extend .button;
+    background: #50d8af;
+    border: 2px solid #50d8af;
+
+    &:hover {
+        background: none;
+        color: #50d8af;
+    }
+}
+
+.primary {
+    @extend .button;
+    background: #0c2e8a;
+    border: 2px solid #0c2e8a;
+
+    &:hover {
+        background: none;
+        color: #0c2e8a;
+    }
+}

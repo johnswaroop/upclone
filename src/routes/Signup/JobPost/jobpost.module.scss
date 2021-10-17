@@ -1,0 +1,248 @@
+@import "../../../scss/variables.scss";
+.jobpost {
+    display: grid;
+    height: 40rem;
+    width: 70rem;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 8px rgb(230, 230, 230);
+    border-radius: 16px;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    animation: appear 1s forwards ease-in-out;
+}
+
+.desc {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    background: #000046;
+    background: linear-gradient(to top, $secondary, $primary);
+}
+
+.progressCon {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.progress {
+    display: flex;
+    width: 80%;
+    height: 0.75rem;
+    margin: 4rem 0;
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.253);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+
+    .progInner {
+        background-color: $secondary;
+        height: 100%;
+        border-radius: 50px;
+        transition: width 1s ease-in-out;
+    }
+}
+
+.progTags {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    p {
+        margin: 0;
+        color: white;
+        font-weight: 400;
+    }
+}
+
+.content {
+    display: flex;
+    width: 80%;
+    margin-top: 3rem;
+    flex-direction: column;
+    animation: appearBasic 1s forwards ease-in-out;
+    h1 {
+        font-family: $fontHero;
+        color: white;
+    }
+    p {
+        font-size: 1rem;
+        color: white;
+        line-height: 150%;
+    }
+}
+
+.form {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    .formCon {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        justify-content: center;
+        height: 100%;
+        animation: appear 1s forwards ease-in-out;
+
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        input,
+        select {
+            margin-top: 0.7rem;
+            height: 1.8rem;
+            width: 100%;
+            border: 1.5px solid rgb(231, 231, 231);
+            border-radius: 4px;
+            &:focus {
+                outline: 2px solid $primary;
+            }
+        }
+
+        select {
+            height: 2rem;
+            padding: 0 0.25rem;
+            margin: 0;
+        }
+
+        .subText {
+            display: flex;
+            flex-direction: column;
+            margin-top: 2rem;
+            h4 {
+                margin: 1rem 0;
+            }
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                li {
+                    margin: 0.75rem 0;
+                }
+            }
+        }
+
+        .btnCon {
+            display: flex;
+            width: 100%;
+            margin-top: 3rem;
+            justify-content: center;
+            gap: 2rem;
+        }
+    }
+}
+
+.skillCon {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+
+    .skill {
+        background-color: rgb(212, 212, 212);
+        border-radius: 15px;
+        padding: 0.25rem 0.75rem;
+        margin: 0.5rem 0.5rem;
+        height: min-content;
+        p {
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 600;
+            color: rgb(0, 0, 0);
+        }
+    }
+}
+
+.typeOfBudget {
+    display: flex;
+    width: 100%;
+    height: 4rem;
+    justify-content: space-between;
+    span {
+        display: flex;
+        height: 100%;
+        width: 45%;
+        box-shadow: 0 0 8px rgb(212, 212, 212);
+        border-radius: 50px;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        cursor: pointer;
+
+        img {
+            height: 2.5rem;
+            object-fit: contain;
+        }
+        p {
+            color: $primary;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        &:hover {
+            box-shadow: 0 0 15px $secondary;
+        }
+    }
+
+    .selected{
+        background-color: $primary;
+        p{
+            color: white;
+        }
+    }
+}
+
+.budgetInput{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+   
+    .hourRate{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        p{
+            margin: 0;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        .inBox{
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 8px rgb(187, 187, 187);
+            border-radius: 50px;
+            padding: 0.25rem 1rem;
+            input{
+                border: none;
+                margin: 0 0.25rem;
+                width: 4rem;
+                font-size: 1.25rem;
+                text-align: right;
+                &:focus{
+                    outline: none;
+                }
+            }
+        }
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes appearBasic {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
