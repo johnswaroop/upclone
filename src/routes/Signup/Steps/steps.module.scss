@@ -8,6 +8,7 @@
     border-radius: 8px;
     flex-direction: column;
     // background: url('./wave.svg');
+    height: 39rem;
     background-repeat: no-repeat;
     background-position: bottom;
     animation: appear 0.8s ease-in-out forwards;
@@ -112,7 +113,8 @@
             width: 14rem;
             border: 1.5px solid rgb(231, 231, 231);
             border-radius: 4px;
-
+            padding: 0 0.5rem;
+          
             &:focus {
                 outline: 2px solid $primary;
             }
@@ -125,6 +127,10 @@
             width: 70%;
         }
     }
+}
+
+.secureAuth{
+    animation: appearBasic 1s forwards ease-in-out;
 }
 
 .conSignUpTwo {
@@ -300,6 +306,16 @@
 .animateSlideLeft {
     animation: slideLeft 0.5s ease-in-out forwards;
 }
+
+@keyframes appearBasic {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 
 @keyframes slideLeft {
     0% {

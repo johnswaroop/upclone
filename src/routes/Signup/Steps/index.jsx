@@ -1,19 +1,105 @@
 import React, { useRef, useState } from 'react'
 import styles from './steps.module.scss'
-
+import axios from 'axios'
 import Button from '../../../components/Button'
+import { toast } from 'react-toastify'
+
+function BasicAuth({ setBaseAuthDone, signUpForm, setSignUpForm }) {
+
+    return (
+        <form onSubmit={() => setBaseAuthDone(true)} >
+            <p className={styles.tag}>Please enter your details to create your free Account</p>
+            <div className={styles.row}>
+                <label htmlFor={"firstName"}>
+                    <p>First name</p>
+                    <input required type="text" name={"firstName"} placeholder={"john"} value={signUpForm.firstName}
+                        onChange={(e) => { setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value }) }}
+                    />
+                </label>
+                <label htmlFor={"lastName"}>
+                    <p>Last name</p>
+                    <input required type="text" name={"lastName"} placeholder={"doe"} value={signUpForm.lastName}
+                        onChange={(e) => { setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value }) }} />
+                </label>
+            </div>
+
+            <div className={styles.row}>
+                <label htmlFor={"email"} className={styles.email}>
+                    <p>Email Address</p>
+                    <input required type="email" name={"email"} placeholder={"example@email.com"} value={signUpForm.email}
+                        onChange={(e) => { setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value }) }} />
+                </label>
+            </div>
+            <div className={styles.row}>
+                <Button btnType={"submit"} className={styles.button}>Next</Button>
+            </div>
+        </form>
+    )
+}
+
+function SecureAuth({ nextStep, setBaseAuthDone, signUpForm, setSignUpForm, callSignUp }) {
+    return (
+        <form className={styles.secureAuth} onSubmit={(e) => { e.preventDefault(); callSignUp(); }}>
+            <p className={styles.tag}>Please enter your details to create your free Account</p>
+            <div className={styles.row}>
+                <label htmlFor="password" className={styles.email}>
+                    <p>Enter your Password</p>
+                    <input required type="password" name={"password"}
+                        onChange={(e) => { setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value }) }} />
+
+                </label>
+            </div>
+            <div className={styles.row}>
+                <label htmlFor="rePassword" className={styles.email}>
+                    <p>Re-enter your Password</p>
+                    <input required type="password" name={"rePassword"}
+                        onChange={(e) => { setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value }) }} />
+                </label>
+            </div>
+            <span style={{ display: "flex" }}>
+                <Button type={"secondary"} className={styles.button} onClick={() => setBaseAuthDone(false)} >Previous</Button>
+                <Button btnType={"submit"} className={styles.button}>Next</Button>
+            </span>
+        </form>
+    )
+}
 
 const StepOne = ({ next }) => {
 
-
-
     const con = useRef(null);
-
     const nextStep = () => {
         con.current.classList.add(styles.animateSlideLeft);
         setTimeout(() => {
             next();
         }, 800)
+    }
+
+    const [signUpForm, setSignUpForm] = useState({});
+    const [baseAuthDone, setBaseAuthDone] = useState(false);
+
+
+    const callSignUp = async () => {
+        if (signUpForm.rePassword === signUpForm.password) {
+            try {
+                let res = await axios.post('/signup', { ...signUpForm });
+                if (res.data.status === "success") {
+                    toast.success("Signup sucessful")
+                    localStorage.setItem("token",res.data.token);
+                    nextStep();
+                }
+                else {
+                    toast.error("Error! Please try again")
+                    console.log(res.data)
+                }
+            }
+            catch (er) {
+                console.log(er);
+            }
+        }
+        else {
+            toast.error("Please verify the passwords");
+        }
+
     }
 
     return (
@@ -27,30 +113,14 @@ const StepOne = ({ next }) => {
             <span className={styles.or}>
                 <h3>Or</h3>
             </span>
-            <p className={styles.tag}>Please enter your details to create your free Account</p>
-            <div className={styles.row}>
-                <label htmlFor="">
-                    <p>First name</p>
-                    <input type="text" />
-                </label>
-                <label htmlFor="">
-                    <p>Last name</p>
-                    <input type="text" />
-                </label>
-            </div>
-
-            <div className={styles.row}>
-                <label htmlFor="" className={styles.email}>
-                    <p>Email Address</p>
-                    <input type="text" />
-                </label>
-            </div>
-            <Button className={styles.button} onClick={nextStep} >Next</Button>
+            {(!baseAuthDone)
+                ? <BasicAuth setBaseAuthDone={setBaseAuthDone} signUpForm={signUpForm} setSignUpForm={setSignUpForm} />
+                : <SecureAuth setBaseAuthDone={setBaseAuthDone} callSignUp={callSignUp} signUpForm={signUpForm} setSignUpForm={setSignUpForm} />}
         </div>
     )
 }
 
-const StepTwo = ({ next, prev,setBaseStepComplete}) => {
+const StepTwo = ({ next, prev, setBaseStepComplete }) => {
 
     const con = useRef(null);
     const [userType, setUserType] = useState("");
@@ -95,16 +165,23 @@ const StepTwo = ({ next, prev,setBaseStepComplete}) => {
 
             <div className={styles.navigate}>
                 <Button type={"secondary"} onClick={prevStep}>Previous</Button>
-                <Button onClick={()=>{setBaseStepComplete(true)}}>Next</Button>
+                <Button onClick={() => { setBaseStepComplete(true) }}>Next</Button>
             </div>
 
         </div>
     )
 }
 
-function Steps({setBaseStepComplete}) {
+function Steps({ setBaseStepComplete }) {
 
     const [currentStep, setCurrentStep] = useState(1);
+
+    const next = () => {
+        setCurrentStep(currentStep + 1);
+    }
+    const prev = () => {
+        setCurrentStep(currentStep - 1);
+    }
 
     const stepSwitch = () => {
         switch (currentStep) {
@@ -117,12 +194,7 @@ function Steps({setBaseStepComplete}) {
         }
     }
 
-    const next = () => {
-        setCurrentStep(currentStep + 1);
-    }
-    const prev = () => {
-        setCurrentStep(currentStep - 1);
-    }
+
 
     return (
         <div className={styles.steps}>

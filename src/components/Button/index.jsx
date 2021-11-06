@@ -1,7 +1,7 @@
 import React from 'react'
 import './button.scss'
 
-function Button({type,shape,className,children,onClick}) {
+function Button({btnType,type,shape,className,children,onClick}) {
     
     let btnClass = "primary";
     
@@ -11,7 +11,7 @@ function Button({type,shape,className,children,onClick}) {
     
        
     return (
-        <button className={className+" "+ btnClass} onClick={onClick}>
+        <button type={btnType} className={className+" "+ btnClass} onClick={onClick}>
             {children}
         </button>
     )

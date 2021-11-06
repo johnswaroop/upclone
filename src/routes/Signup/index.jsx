@@ -3,10 +3,11 @@ import styles from './signup.module.scss'
 
 import TopNav from '../../components/TopNav'
 import Steps from './Steps'
-import JobPost from './JobPost'
+import JobPost from '../../components/JobPost'
+
 
 function Signup() {
-    
+
     const [baseStepComplete, setBaseStepComplete] = useState(false);
 
     return (
@@ -14,7 +15,7 @@ function Signup() {
             <TopNav />
             <div className={styles.content}>
                 {
-                    !baseStepComplete ? <Steps setBaseStepComplete={setBaseStepComplete}/> : <JobPost/>
+                    !baseStepComplete ? <Steps setBaseStepComplete={setBaseStepComplete} /> : <JobPost />
                 }
             </div>
         </div>
