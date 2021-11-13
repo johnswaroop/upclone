@@ -5,13 +5,28 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useHistory } from "react-router";
 //routes
 import Signup from "./routes/Signup";
 import Signin from "./routes/Signin";
 import PostJob from './routes/PostJob';
+import DevForm from "./routes/DevForm";
 
-let token = localStorage.getItem('token');
+const FREELANCE = "freelance"
+const HIRE = "hire"
+
+const RedirectSignin = ({ comp, userType }) => {
+  let token = localStorage.getItem('token');
+  let savedUserType = localStorage.getItem('userType');
+  let history = useHistory();
+  if (token && savedUserType && (savedUserType === userType)) {
+    return comp
+  }
+  else {
+    history.push("/signin");
+    return null
+  }
+}
 
 function Router() {
 
@@ -25,7 +40,10 @@ function Router() {
           <Signin />
         </Route>
         <Route exact path="/postjob">
-          {token ? <PostJob /> : <Signin />}
+          {<RedirectSignin comp={<PostJob />} userType={HIRE} />}
+        </Route>
+        <Route exact path="/devform">
+          {<RedirectSignin comp={<DevForm />} userType={FREELANCE} />}
         </Route>
         {/* <Route exact path="/postjobReview">
           <PostJobReview />

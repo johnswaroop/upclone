@@ -64,7 +64,7 @@ function SecureAuth({ nextStep, setBaseAuthDone, signUpForm, setSignUpForm, call
     )
 }
 
-const StepOne = ({ next }) => {
+const StepOne = ({ next, signUpForm, setSignUpForm }) => {
 
     const con = useRef(null);
     const nextStep = () => {
@@ -74,27 +74,12 @@ const StepOne = ({ next }) => {
         }, 800)
     }
 
-    const [signUpForm, setSignUpForm] = useState({});
     const [baseAuthDone, setBaseAuthDone] = useState(false);
 
 
     const callSignUp = async () => {
         if (signUpForm.rePassword === signUpForm.password) {
-            try {
-                let res = await axios.post('/signup', { ...signUpForm });
-                if (res.data.status === "success") {
-                    toast.success("Signup sucessful")
-                    localStorage.setItem("token",res.data.token);
-                    nextStep();
-                }
-                else {
-                    toast.error("Error! Please try again")
-                    console.log(res.data)
-                }
-            }
-            catch (er) {
-                console.log(er);
-            }
+            nextStep();
         }
         else {
             toast.error("Please verify the passwords");
@@ -120,10 +105,10 @@ const StepOne = ({ next }) => {
     )
 }
 
-const StepTwo = ({ next, prev, setBaseStepComplete }) => {
+const StepTwo = ({ next, prev, setBaseStepComplete, userType, setUserType, signUpForm, setSignUpForm }) => {
 
     const con = useRef(null);
-    const [userType, setUserType] = useState("");
+    const [country, setCountry] = useState("USA");
 
     const prevStep = () => {
         con.current.classList.add(styles.animateSlideLeft);
@@ -131,6 +116,43 @@ const StepTwo = ({ next, prev, setBaseStepComplete }) => {
             con.current.style.display = "none";
             prev();
         }, 800)
+    }
+
+    const postUserType = async () => {
+        if (userType.length > 0 && country.length > 0) {
+
+            try {
+                let res = await axios.post('/signup', { ...signUpForm, userType, country });
+                if (res.data.status === "success") {
+                    toast.success("Signup sucessful")
+                    localStorage.setItem("token", res.data.token);
+                    setBaseStepComplete(true)
+                }
+                else {
+                    toast.error("Error! Please try again")
+                    console.log(res.data)
+                }
+            }
+            catch (er) {
+                console.log(er);
+            }
+
+            // await axios.post('/postUserType', {
+            //     userType,
+            //     country
+            // },
+            //     {
+            //         headers: {
+            //             'Authorization': "Bearer " + localStorage.getItem("token")
+            //         }
+            //     });
+
+            // 
+        }
+        else {
+            toast.error("Please fill the details");
+        }
+
     }
 
     return (
@@ -149,11 +171,11 @@ const StepTwo = ({ next, prev, setBaseStepComplete }) => {
                 <p className={styles.tag}>I want to</p>
                 <span className={styles.selectType}>
                     <div className={(userType === "hire") ? (styles.selected) : (styles.unSelected)}
-                        onClick={() => { setUserType("hire") }} >
+                        onClick={() => { setUserType("hire"); localStorage.setItem("userType","hire") }} >
                         <p>Hire for a project</p>
                     </div>
                     <div className={(userType === "freelance") ? (styles.selected) : (styles.unSelected)}
-                        onClick={() => { setUserType("freelance") }}>
+                        onClick={() => { setUserType("freelance"); localStorage.setItem("userType","freelance") }}>
                         <p>Work as Freelancer</p>
                     </div>
                 </span>
@@ -165,16 +187,18 @@ const StepTwo = ({ next, prev, setBaseStepComplete }) => {
 
             <div className={styles.navigate}>
                 <Button type={"secondary"} onClick={prevStep}>Previous</Button>
-                <Button onClick={() => { setBaseStepComplete(true) }}>Next</Button>
+                <Button onClick={() => { postUserType() }}>Next</Button>
             </div>
 
         </div>
     )
 }
 
-function Steps({ setBaseStepComplete }) {
+function Steps({ setBaseStepComplete, userType, setUserType }) {
 
     const [currentStep, setCurrentStep] = useState(1);
+
+    const [signUpForm, setSignUpForm] = useState({});
 
     const next = () => {
         setCurrentStep(currentStep + 1);
@@ -186,9 +210,9 @@ function Steps({ setBaseStepComplete }) {
     const stepSwitch = () => {
         switch (currentStep) {
             case 1:
-                return <StepOne next={next} />
+                return <StepOne next={next} signUpForm={signUpForm} setSignUpForm={setSignUpForm} />
             case 2:
-                return <StepTwo next={next} prev={prev} setBaseStepComplete={setBaseStepComplete} />
+                return <StepTwo userType={userType} setUserType={setUserType} next={next} prev={prev} setBaseStepComplete={setBaseStepComplete} signUpForm={signUpForm} setSignUpForm={setSignUpForm} />
             default:
                 return <h1>test</h1>
         }

@@ -56,17 +56,28 @@
     }
 
     .value {
-        font-size: 1.25rem;
+        font-size: 1rem;
         margin-top: 0;
         font-family: $fontHero;
         // background-color: rgb(240, 247, 255);
         border: 1px solid rgb(202, 202, 202);
-        padding: 0.7rem 0.5rem;
+        padding: 0.5rem 0.5rem;
         border-radius: 8px;
         position: relative;
       //  min-height: 1.7rem;
     }
-
+      
+    .desc{
+        padding-right: 2rem;
+        line-height: 150%;
+        overflow: hidden;
+        font-size: 0.9rem;
+        .editIcon{
+            bottom: auto;
+            top: 0;
+            margin-top: 1rem
+        }
+    }
 
 
 }

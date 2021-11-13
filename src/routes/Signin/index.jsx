@@ -6,6 +6,9 @@ import TopNav from '../../components/TopNav'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
 
+const FREELANCE = "freelance"
+const HIRE = "hire"
+
 function SigninModule() {
 
     const [signinForm, setSigninForm] = useState({});
@@ -16,7 +19,16 @@ function SigninModule() {
         let res = await axios.post('/signin', signinForm);
         if (res.data.status === "success") {
             localStorage.setItem('token', res.data.token);
-            history.push('/postjob');
+            localStorage.setItem('userType', res.data.userType);
+            if (res.data.userType === FREELANCE) {
+                history.push('/devform');
+            }
+            else if (res.data.userType === HIRE) {
+                history.push('/postjob');
+            }
+            else {
+                toast.error("Sign in error ! please try again")
+            }
         }
         else {
             toast.error("Sign in error ! please try again")
