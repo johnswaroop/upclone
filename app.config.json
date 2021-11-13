@@ -4,7 +4,7 @@
             "name": "frontend",
             "script": "npx",
             "interpreter": "none",
-            "args": "serve -p 3000"
+            "args": "serve -p 3000 build"
         }
     ]
 }
